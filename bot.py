@@ -12,7 +12,7 @@ from telegram.ext import (
 from keep_alive import keep_alive
 
 # --- Configuration ---
-BOT_TOKEN = "YOUR_NEW_BOT_TOKEN_HERE"  # ⚠️ Replace this with your new Bot Token
+BOT_TOKEN = "8919591484:AAFpOmAqb-2e9U6RjBTDQ9GxnRlKPd-GyE8"  # ⚠️ Replace this with your new Bot Token
 
 ADMIN_USERNAME = "saddamadmin"
 ADMIN_PASSWORD = "saddamadmin1234"
