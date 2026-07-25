@@ -56,15 +56,41 @@ async def start_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     
     await update.message.reply_text(txt, reply_markup=InlineKeyboardMarkup(kb), parse_mode=ParseMode.HTML)
 
-# --- Super Fast Auto-Accept Logic ---
+# --- Super Fast Auto-Accept & Welcome Message Logic ---
 async def handle_join_request(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    # Accepts request instantly (0.1s)
+    user_id = update.chat_join_request.from_user.id
+    chat_id = update.chat_join_request.chat.id
+    user_name = update.chat_join_request.from_user.first_name
+    chat_title = update.chat_join_request.chat.title
+
     try:
-        await context.bot.approve_chat_join_request(
-            chat_id=update.chat_join_request.chat.id, 
-            user_id=update.chat_join_request.from_user.id
+        # 1. Approve request instantly (in 0.1 seconds)
+        await context.bot.approve_chat_join_request(chat_id=chat_id, user_id=user_id)
+        
+        # 2. Send Promotional Welcome Message in English
+        welcome_text = (
+            f"🎉 <b>Hello {user_name}!</b> 👋\n\n"
+            f"✅ Your join request to <b>{chat_title}</b> has been successfully approved!\n\n"
+            f"🔥 <b>A Special Gift for You:</b>\n"
+            f"Do you want to download videos and music (MP3) from TikTok, Facebook, YouTube, or Instagram without any <i>Watermark</i>?\n\n"
+            f"👇 <i>Use our Premium Downloader Bot for completely free:</i>\n"
+            f"👉 @AllInOneDL_AIBot"
         )
-    except Exception as e:
+        
+        # Downloader Bot Direct Button
+        kb = [[InlineKeyboardButton("📥 Open Video Downloader Bot", url="https://t.me/AllInOneDL_AIBot")]]
+        
+        try:
+            await context.bot.send_message(
+                chat_id=user_id, 
+                text=welcome_text, 
+                reply_markup=InlineKeyboardMarkup(kb),
+                parse_mode=ParseMode.HTML
+            )
+        except Exception:
+            pass # Silently ignore if user blocked the bot or inbox is locked
+            
+    except Exception:
         pass # Silently ignore if bot lacks admin rights
 
 # --- Admin Panel ---
